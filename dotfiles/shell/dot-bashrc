@@ -1,0 +1,139 @@
+# History control
+HISTCONTROL=ignoredups:ignorespace
+HISTSIZE=100000
+HISTFILESIZE=2000000
+shopt -s histappend
+shopt -s cdspell
+bind TAB:menu-complete
+
+# Bash completion
+if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
+fi
+
+# Alias definitions
+alias ls='ls --color=auto -lashx'
+alias ll='ls --color=auto -lash'
+alias la='ls --color=auto -A'
+alias l='ls --color=auto -CF' 
+alias grep='grep --color=auto'
+alias ungron="gron --ungron"
+alias ks='ls -lashtx '
+alias :q="exit"
+alias _='sudo'
+
+# functions file
+if [ -f ~/.sh_aliases ]; then
+    . ~/.sh_aliases
+fi
+
+# Color
+export TERM="xterm-256color"
+
+# Vim
+export EDITOR=/usr/bin/vim
+
+# PATH
+export PATH=~/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:$PATH$
+
+# Go
+export GOROOT=/usr/lib/go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+source $GOPATH/src/github.com/tomnomnom/gf/gf-completion.bash
+
+# Wordlists
+export DIRS_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-directories.txt
+export DIRS_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-directories.txt
+export FILES_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-files.txt
+export FILES_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-files.txt
+export WORDS_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-words.txt
+export WORDS_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-words.txt
+export EXT_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-extensions.txt
+export EXT_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-extensions.txt
+
+# 'Safe' version of __git_ps1 to avoid errors on systems that don't have it
+function gitPrompt {
+  command -v __git_ps1 > /dev/null && __git_ps1 " (%s)"
+}
+
+# Colours
+txtblk='\[\e[0;30m\]' # Black - Regular
+txtred='\[\e[0;31m\]' # Red
+txtgrn='\[\e[0;32m\]' # Green
+txtylw='\[\e[0;33m\]' # Yellow
+txtblu='\[\e[0;34m\]' # Blue
+txtpur='\[\e[0;35m\]' # Purple
+txtcyn='\[\e[0;36m\]' # Cyan
+txtwht='\[\e[0;37m\]' # White
+bldblk='\[\e[1;30m\]' # Black - Bold
+bldred='\[\e[1;31m\]' # Red
+bldgrn='\[\e[1;32m\]' # Green
+bldylw='\[\e[1;33m\]' # Yellow
+bldblu='\[\e[1;34m\]' # Blue
+bldpur='\[\e[1;35m\]' # Purple
+bldcyn='\[\e[1;36m\]' # Cyan
+bldwht='\[\e[1;37m\]' # White
+unkblk='\[\e[4;30m\]' # Black - Underline
+undred='\[\e[4;31m\]' # Red
+undgrn='\[\e[4;32m\]' # Green
+undylw='\[\e[4;33m\]' # Yellow
+undblu='\[\e[4;34m\]' # Blue
+undpur='\[\e[4;35m\]' # Purple
+undcyn='\[\e[4;36m\]' # Cyan
+undwht='\[\e[4;37m\]' # White
+bakblk='\[\e[40m\]'   # Black - Background
+bakred='\[\e[41m\]'   # Red
+bakgrn='\[\e[42m\]'   # Green
+bakylw='\[\e[43m\]'   # Yellow
+bakblu='\[\e[44m\]'   # Blue
+bakpur='\[\e[45m\]'   # Purple
+bakcyn='\[\e[46m\]'   # Cyan
+bakwht='\[\e[47m\]'   # White
+txtrst='\[\e[0m\]'    # Text Reset
+
+# Prompt colours
+atC="${txtgrn}"
+nameC="${txtcyn}"
+hostC="${txtwht}"
+pathC="${txtblu}"
+gitC="${txtcyn}"
+pointerC="${txtgrn}"
+normalC="${txtwht}"
+borderC="${txtgrn}"
+
+# Red name for root
+if [ "${UID}" -eq "0" ]; then 
+  nameC="${txtred}" 
+fi
+
+# Prompt
+PROMPT_COMMAND=__prompt_command
+__prompt_command() {
+    local EXIT="$?"
+    PS1=''
+
+    if [ $EXIT -eq 127 ]; then
+        pointerC="${txtpur}"
+        atC="${txtpur}"
+        borderC="${txtpur}"
+    elif [ $EXIT -eq 1 ]; then
+        pointerC="${txtred}"
+        atC="${txtred}"
+        borderC="${txtred}"
+    else 
+        pointerC="${txtgrn}"
+        atC="${txtgrn}"
+        borderC="${txtgrn}"
+    fi
+    PS1+="${nameC}\u${atC}:${borderC}[${pathC}\w${borderC}]${gitC}\$(gitPrompt)${pointerC} $ ${normalC}"
+}
+
+# Local settings go last
+if [ -f ~/.localrc ]; then 
+  source ~/.localrc
+fi

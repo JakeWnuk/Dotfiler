@@ -1,0 +1,143 @@
+" Don't try to be vi compatible
+set nocompatible
+
+" Helps force plugins to load correctly when it is turned back on below
+filetype off
+
+" Load plugins here (vundle)
+set rtp+=~/.vim/bundle/vundle/
+let g:vundle_default_git_proto = 'git'
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" Bundles
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'scrooloose/nerdtree'
+Plugin 'fatih/vim-go'
+
+call vundle#end()
+
+" Turn on syntax highlighting
+syntax on
+
+" For plugins to load correctly
+filetype plugin indent on
+
+" TODO: Pick a leader key
+" let mapleader = ","
+
+" Security
+set modelines=0
+
+" Show line numbers
+"set number
+"set relativenumber
+
+" Show file stats
+set ruler
+
+" Remove blinking and flashing on error
+set visualbell
+set t_vb=
+
+" Encoding
+set encoding=utf-8
+
+" Whitespace and Indentation
+set wrap
+set textwidth=79
+set formatoptions=tcqrn1
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set shiftround
+
+" Cursor motion
+set scrolloff=3
+set backspace=indent,eol,start
+set matchpairs+=<:> " use % to jump between pairs
+runtime! macros/matchit.vim
+
+" Move up/down editor lines
+nnoremap j gj
+nnoremap k gk
+
+" Allow hidden buffers
+set hidden
+
+" Rendering
+set ttyfast
+
+" Status bar
+set laststatus=2
+
+" Last line
+set showmode
+set showcmd
+
+" Searching
+nnoremap / /\v
+vnoremap / /\v
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set showmatch
+set gdefault
+
+
+" Remap help key.
+inoremap <F1> <ESC>:set invfullscreen<CR>a
+nnoremap <F1> :set invfullscreen<CR>
+vnoremap <F1> :set invfullscreen<CR>
+
+" Line wrapping
+set nowrap
+set linebreak
+
+" Auto indent what you can
+set autoindent
+
+" Visual prompt for command completion
+set wildmenu
+
+" code folding
+set nofoldenable
+
+" Color scheme (terminal)
+set t_Co=256
+set background=dark
+let g:solarized_termcolors=256
+let g:solarized_termtrans=1
+colorscheme deus
+
+" Airline config
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='deus'
+
+" vimprev
+if $VIMENV == 'talk'
+  set background=light
+  let g:solarized_termcolors=256
+  colo solarized
+  noremap <Space> :n<CR>
+  noremap <Backspace> :N<CR>
+else
+  " Trans background
+  hi Normal ctermbg=none
+  hi NonText ctermbg=none
+endif
+
+if $VIMENV == 'prev'
+  noremap <Space> :n<CR>
+  noremap <Backspace> :N<CR>
+  noremap <C-D> :call delete(expand('%')) <bar> argdelete % <bar> bdelete<CR>
+  set noswapfile
+endif

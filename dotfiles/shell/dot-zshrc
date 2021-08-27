@@ -1,0 +1,103 @@
+# Syntax highlighting and Z
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/zsh-z.plugin.zsh
+autoload -U compinit && compinit
+
+# Suggestions
+zstyle ':autocomplete:tab:*' insert-unambiguous yes
+zstyle ':completion:*' menu select
+zstyle ':autocomplete:*' min-input 2
+# case insensitive path-completion
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
+# partial completion suggestions
+zstyle ':completion:*' list-suffixeszstyle ':completion:*' expand prefix suffix
+
+# Arrow binds
+bindkey '^[[1;5C' forward-word                    # ctrl + ->
+bindkey '^[[C' forward-word                       # ctrl + ->
+bindkey '^[[1;5D' backward-word                   # ctrl + <-
+bindkey '^[[D' backward-word                      # ctrl + <-
+
+# Fix searching
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "$key[Up]" up-line-or-beginning-search
+bindkey "$key[Down]" down-line-or-beginning-search
+bindkey "^?" backward-delete-char
+
+# History control
+HISTFILE=~/.zsh_history
+HISTCONTROL=ignoredups:ignorespace
+HISTSIZE=50000000
+HISTFILESIZE=50000000
+SAVEHIST=50000000
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_FIND_NO_DUPS
+
+# functions file
+if [ -f ~/.sh_aliases ]; then
+    . ~/.sh_aliases
+fi
+
+# grc file              
+if [ -f ~/.grc_aliases ]; then
+    . ~/.grc_aliases
+fi
+
+# Alias definitions
+alias ls='ls --color=auto -lashx'
+alias ll='ls --color=auto -lash'
+alias la='ls --color=auto -A'
+alias l='ls --color=auto -CF' 
+alias grep='grep --color=auto'
+alias ungron="gron --ungron"
+alias ks='ls -lashtx '
+alias :q="exit"
+alias _='sudo'
+
+# Color
+export TERM="xterm-256color"
+
+# Vim
+export EDITOR=/usr/bin/vim
+
+# PATH
+export PATH=~/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:$PATH$
+
+# Go
+export GOROOT=/usr/lib/go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+source $GOPATH/src/github.com/tomnomnom/gf/gf-completion.zsh
+
+# Wordlists
+export DIRS_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-directories.txt
+export DIRS_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-directories.txt
+export FILES_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-files.txt
+export FILES_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-files.txt
+export WORDS_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-words.txt
+export WORDS_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-words.txt
+export EXT_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-extensions.txt
+export EXT_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-extensions.txt
+
+# Prompt colours
+atC="%F{38}"
+nameC="%F{38}"
+hostC="%F{245}"
+pathC="%F{172}"
+gitC="%F{245}"
+pointerC="%F{40}"
+borderC="%F{245}"
+
+# Red name for root
+if [ "${UID}" -eq "0" ]; then 
+  nameC="%F{167}" 
+fi
+
+# Prompt
+NEWLINE=$'\n'
+PROMPT="%f${nameC}%m%f${atC}:%f${borderC}[%f${pathC}%~%f${borderC}]%f%(?.${pointerC}.%F{196})${NEWLINE}$ %f"

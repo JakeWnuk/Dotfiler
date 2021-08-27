@@ -1,0 +1,37 @@
+[http]
+    headers = [
+        "User-Agent: Mozilla Firefox Mozilla/5.0",
+	    "x-forwarded-for: 127.0.0.1"
+    ]
+    method = "GET"
+    proxyurl = "http://127.0.0.1:8080"
+
+[general]
+    autocalibration = true
+    autocalibrationstrings = [
+    "adminXVlBzgbaiCMRAjWw",
+    "adminXVlBzgbaiCMRAjWw/",
+    ".adminXVlBzgbaiCMRAjWw/",
+    ".adminXVlBzgbaiCMRAjWw",
+    "adminXVlBzgbaiCMRAjWw.jWw",
+    "adminXVlBzgbaiCMRAjWw.php",
+    "adminXVlBzgbaiCMRAjWw.html",
+    "adminXVlBzgbaiCMRAjWw.txt",
+    "adminXVlBzgbaiCMRAjWw.aspx",
+    "adminXVlBzgbaiCMRAjWw.js"
+    ] 
+    colors = true
+    threads = 40
+    verbose = true
+
+[input]
+    ignorewordlistcomments = true
+
+[output]
+    outputformat = "csv"
+    outputcreateemptyfile = false
+
+[filter]
+
+[matcher]
+    status = "all"

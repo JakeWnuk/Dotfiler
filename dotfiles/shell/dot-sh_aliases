@@ -1,0 +1,119 @@
+# alias functions
+
+# nmap
+nmap_box(){
+    sudo grc nmap -sS -sCV -T4 -Pn --top-ports 5000 -oA ./nmap-quick-$1-5000p-%m%d --max-retries 1 --host-timeout 10m  --script-timeout 10m --defeat-rst-ratelimit $1
+    sudo grc nmap -sSV -T4 -Pn -p- -oA ./nmap-ss-$1-65535p-%m%d --max-retries 2 --host-timeout 60m  --script-timeout 60m --defeat-rst-ratelimit $1
+    sudo grc nmap -sUV -T4 -Pn -p20000 -oA ./nmap-su-$1-20000p-%m%d --max-retries 2 --host-timeout 90m  --script-timeout 90m $1
+}
+
+nmapprev(){
+    find -type f -name '*.gnmap' -exec cat {} \; | nmaptocsv | column -s '";"' -t
+}
+
+nsearch(){
+    ls -l /usr/share/nmap/scripts/* | grep -i $1 | awk -F 'scripts/' '{ print $2 }'
+    nmap --script-help=$1 2>/dev/null | grep -v 'Starting Nmap'
+}
+
+# ffuf
+ffuf_recursive(){
+    echo 'FORMAT: URL WORDLIST'
+    info=$(echo $1 | unfurl format %s-%d)
+    ffuf -u $1/FUZZ -w $2 -recursion -recursion-depth 5 -o ffuf_recursive_$info.csv
+}
+
+ffuf_vhost(){
+    echo 'FORMAT: URL WORDLIST'
+    dom=$(echo $1 unfurl domain)
+    info=$(echo $1 | unfurl format %s-%d)
+    ffuf -u $1 -H "Host: FUZZ.$dom" -w $2 -fc 400,404 -o ffuf_vhost_$info.csv -acc $1
+}
+
+ffufprev(){
+    find -name "ffuf*.csv" -exec cat {} \; | grep -vE ',302,|,429,|,400,|,404,|,500,|,501,|,502,|,503,' | cut -d ',' -f1,2,5,6,7,8,9 | column -s ',' -t | sort -u -n -k 4
+}
+
+# nuclei (rez0)
+nuclei_site(){
+    echo $1 | nuclei -t cves/ -t exposed-panels/ -t default-logins/ \
+    -t exposures/ -t vulnerabilities/ -t fuzzing/ -t misconfiguration/ \
+    -t miscellaneous/dir-listing.yaml -H "User-Agent: Mozilla Firefox Mozilla/5.0" -c 15
+}
+nuclei_file(){
+    nuclei -l $1 -t cves/ -t exposed-panels/ -t default-logins/ \
+    -t exposures/ -t vulnerabilities/ -t fuzzing/ -t misconfiguration/ \
+    -t miscellaneous/dir-listing.yaml -H "User-Agent: Mozilla Firefox Mozilla/5.0" -c 15
+}
+
+
+# http verb tampering (rez0)
+tamper_verbs() {
+    echo -n "$1: "; for i in GET POST HEAD PUT DELETE CONNECT OPTIONS TRACE PATCH ASDF; \
+	do echo "echo -n \"$i-$(curl -k -s -X $i $1 -o /dev/null -w '%{http_code}') \""; done \
+	| parallel -j 10 ; echo
+}
+
+# httpx wrapper
+httpx_xxx(){
+httpx  -ports 80,81,300,443,591,593,832,981,1010,1311,2082,2087,2095,2096,2480,3000,3128,3333,4243,4567,4711,4712,4993,5000,5104,5108,5800,6543,7000,7396,7474,8000,8001,8008,8014,8042,8069,8080,8081,8088,8090,8091,8118,8123,8172,8222,8243,8280,8281,8333,8443,8500,8834,8880,8888,8983,9000,9043,9060,9080,9090,9091,9200,9443,9800,9981,12443,16080,18091,18092,20720,28017 -x GET,POST -method -title -tech-detect -status-code -follow-redirects -silent -csp-probe -H x-forwarded-for: 127.0.0.1 -H User-Agent: Mozilla Firefox Mozilla/5.0
+}
+
+# linkfinder
+linkfinder_url(){
+	python3 ~/tools/linkfinder/linkfinder.py -i $1 -d -o cli | grep -v http | grep -v // | sed 's/^\.\//\//' | sed 's/^\///'
+}
+
+# secretfinder
+secretfinder_url(){
+    python3 ~/tools/secretfinder/SecretFinder.py -i $1 -e -g 'bootstrap;api.google.com' -o cli
+}
+
+# arjun
+arjun_passive(){
+    echo 'only works on domains not subdomains'
+    arjun -u $1 --passive - -oB 127.0.0.1:8080 -c 250
+}
+
+arjun_paths(){
+    echo 'arjun_paths URL_PATHS_FILE <GET/POST/JSON/XML>'
+    arjun -i $1 -m $2 -oB 127.0.0.1:8080 -c 250
+}
+
+# convert .bin to shellcode (pry0cc)
+function bin2shellcode {
+    hexdump -v -e '"\\""x" 1/1 "%02x" ""' ${1}
+}
+
+# cidr2ip (pry0cc)
+cidr2ip(){
+	nmap -sL $1 | awk '/Nmap scan report/{print $NF}'
+}
+
+# wordlists
+add_word(){
+	echo $1 | anew ~/wordlists/custom/new-word-tokens.txt
+}
+
+add_word_from_file(){
+	while read line;do add_word $line;done < $1
+}
+
+# hashcat
+combinator(){
+    if [[ $# -ne 3 ]]; then
+        /usr/lib/hashcat-utils/combinator.bin $1 $2
+    else
+        /usr/lib/hashcat-utils/combinator3.bin $1 $2 $3
+    fi
+}
+
+add_pot(){
+    cat ~/.hashcat/hashcat.potfile | cut -d ':' -f2 | anew -q $1
+}
+
+hashcat_rules(){
+    wc -l `find /usr/share/hashcat/rules -type f` | sort -g -k 1,1
+}
+
+
