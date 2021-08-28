@@ -20,20 +20,22 @@ nsearch(){
 
 # ffuf
 ffuf_recursive(){
-    echo 'FORMAT: URL WORDLIST'
+    echo 'FORMAT: URL/FUZZ WORDLIST'
     info=$(echo $1 | unfurl format %s-%d)
-    ffuf -u $1/FUZZ -w $2 -recursion -recursion-depth 5 -o ffuf_recursive_$info.csv
+    ffuf -u $1/FUZZ -w $2 -recursion -recursion-depth 5 -o recursive_$info.ffuf
+    echo 'FORMAT: URL/FUZZ WORDLIST'
 }
 
 ffuf_vhost(){
-    echo 'FORMAT: URL WORDLIST'
+    echo 'FORMAT: URL WORDLIST (NO NEED FOR FUZZ KEYWORD)'
     dom=$(echo $1 unfurl domain)
     info=$(echo $1 | unfurl format %s-%d)
-    ffuf -u $1 -H "Host: FUZZ.$dom" -w $2 -fc 400,404 -o ffuf_vhost_$info.csv -acc $1
+    ffuf -u $1 -H "Host: FUZZ.$dom" -w $2 -fc 400,404 -o vhost_$info.ffuf -acc $1
+    echo 'FORMAT: URL WORDLIST (NO NEED FOR FUZZ KEYWORD)'
 }
 
 ffufprev(){
-    find -name "ffuf*.csv" -exec cat {} \; | grep -vE ',302,|,429,|,400,|,404,|,500,|,501,|,502,|,503,' | cut -d ',' -f1,2,5,6,7,8,9 | sort -u | csvtomd
+    find -name "*.ffuf" -exec cat {} \; | grep -vE ',429,|,400,|,404,|,500,|,501,|,502,|,503,' | cut -d ',' -f1,2,5,6,7,8,9 | sort -r -u --field-separator=',' -k 4 | csvtomd
 }
 
 # nuclei (rez0)
