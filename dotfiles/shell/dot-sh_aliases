@@ -22,7 +22,7 @@ nsearch(){
 ffuf_recursive(){
     echo 'FORMAT: URL/FUZZ WORDLIST'
     info=$(echo $1 | unfurl format %s-%d)
-    ffuf -u $1/FUZZ -w $2 -recursion -recursion-depth 5 -o recursive_$info.ffuf
+    ffuf -u $1 -w $2 -recursion -recursion-depth 5 -o recursive_$info.ffuf
     echo 'FORMAT: URL/FUZZ WORDLIST'
 }
 
