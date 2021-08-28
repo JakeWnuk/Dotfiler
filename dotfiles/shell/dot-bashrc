@@ -47,14 +47,14 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 source $GOPATH/src/github.com/tomnomnom/gf/gf-completion.bash
 
 # Wordlists
-export DIRS_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-directories.txt
-export DIRS_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-directories.txt
-export FILES_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-files.txt
-export FILES_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-files.txt
-export WORDS_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-words.txt
-export WORDS_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-words.txt
-export EXT_LARGE=~/wordlists/assetnote-wordlists/data/manual/raft-large-extensions.txt
-export EXT_SMALL=~/wordlists/assetnote-wordlists/data/manual/raft-small-extensions.txt
+export DIRS_LARGE=~/wordlists/assetnote/data/manual/raft-large-directories.txt
+export DIRS_SMALL=~/wordlists/assetnote/data/manual/raft-small-directories.txt
+export FILES_LARGE=~/wordlists/assetnote/data/manual/raft-large-files.txt
+export FILES_SMALL=~/wordlists/assetnote/data/manual/raft-small-files.txt
+export WORDS_LARGE=~/wordlists/assetnote/data/manual/raft-large-words.txt
+export WORDS_SMALL=~/wordlists/assetnote/data/manual/raft-small-words.txt
+export EXT_LARGE=~/wordlists/assetnote/data/manual/raft-large-extensions.txt
+export EXT_SMALL=~/wordlists/assetnote/data/manual/raft-small-extensions.txt
 
 # 'Safe' version of __git_ps1 to avoid errors on systems that don't have it
 function gitPrompt {

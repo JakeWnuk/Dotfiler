@@ -118,6 +118,5 @@ pipx install arjun
 pipx install crackmapexec
 pipx install impacket
 pipx install bloodhound
-pipx install nmaptocsv
 pipx install csvtomd
 echo 'Completed!'

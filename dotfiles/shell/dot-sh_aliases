@@ -8,7 +8,9 @@ nmap_box(){
 }
 
 nmapprev(){
-    find -type f -name '*.gnmap' -exec cat {} \; | nmaptocsv | column -s '";"' -t
+    find -type f -name '*.gnmap' -exec cat {} \; | egrep -v "^#|Status: Up" | cut -d' ' -f2,4- | \
+    sed -n -e 's/Ignored.*//p'  | \
+    awk '{print  "\033[32m" "Host: " $1 "\033[0m" "\033[34m" " Ports: " NF-1 "\033[0m"; $1=""; for(i=2; i<=NF; i++) { a=a" "$i; }; split(a,s,","); for(e in s) { split(s[e],v,"/"); printf "%-8s %s/%-7s %s\n" , v[2], v[3], v[1], v[5]}; a="" }'
 }
 
 nsearch(){
@@ -31,7 +33,7 @@ ffuf_vhost(){
 }
 
 ffufprev(){
-    find -name "ffuf*.csv" -exec cat {} \; | grep -vE ',302,|,429,|,400,|,404,|,500,|,501,|,502,|,503,' | cut -d ',' -f1,2,5,6,7,8,9 | column -s ',' -t | sort -u -n -k 4
+    find -name "ffuf*.csv" -exec cat {} \; | grep -vE ',302,|,429,|,400,|,404,|,500,|,501,|,502,|,503,' | cut -d ',' -f1,2,5,6,7,8,9 | sort -u | csvtomd
 }
 
 # nuclei (rez0)
